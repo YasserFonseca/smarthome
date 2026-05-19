@@ -5,9 +5,15 @@ import ColorPicker from "./ColorPicker";
 import Dropdown from "components/dropdown";
 import TimeField from 'react-simple-timefield';
 
-const Room = (props: {
+  const Room = (props: {
     url: any;
     icon: any;
+    name?: string;
+    onToggle?: () => void;
+    children?: React.ReactNode;
+    nightMode?: boolean;
+    isTvOn?: boolean;
+    tvPosition?: string;
   }) => {
     
     const [color, setColor] = useState("yellow");
@@ -17,11 +23,10 @@ const Room = (props: {
     const [dropdownTimeOpen, setDropdownTimeOpen] = useState(false);
 
     const handleOnOff = () => {
-        if (dimmer > 0)
-            setDimmer(0);
-        else
-            setDimmer(75);
-        setClassOn(dimmer === 0 ? "text-brand-500" : "text-gray-500");
+        const newDimmer = dimmer > 0 ? 0 : 75;
+        setDimmer(newDimmer);
+        setClassOn(newDimmer > 0 ? "text-brand-500" : "text-gray-500");
+        if (props.onToggle) props.onToggle();
     };
 
     const handleChange = (color: any) => {
@@ -59,9 +64,30 @@ const Room = (props: {
         }
     };
     
+    const isLightOn = dimmer > 0;
+    
+    let gradients = [];
+    
+    if (props.isTvOn) {
+      gradients.push(`radial-gradient(circle at ${props.tvPosition || '80% 50%'}, rgba(130, 220, 255, 0.5) 0%, rgba(0,0,0,0) 60%)`);
+    }
+
+    if (props.nightMode) {
+       if (!isLightOn) {
+           gradients.push(`linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85))`);
+       } else {
+           gradients.push(`linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2))`);
+       }
+    }
+
+    gradients.push(`radial-gradient(circle, ${color} 0%, rgba(70,252,222,0) ${dimmer}%)`);
+    gradients.push(`url(${props.url})`);
+
+    const bgImage = gradients.join(', ');
+
     return (
-        <div style={{backgroundImage: `radial-gradient(circle, ${color} 0%, rgba(70,252,222,0) ${dimmer}%), url(${props.url})`, backgroundRepeat: 'no-repeat' }}>
-            
+        <div style={{backgroundImage: bgImage, backgroundRepeat: 'no-repeat', backgroundSize: '100% 100%', width: '100%', height: '100%', position: 'relative', transition: 'background-image 0.5s ease-in-out' }}>
+            {props.children}
             <div className={`flex w-auto h-auto place-items-start`} style={{flexDirection: 'column'}}>
                 <div className="ml-2 rounded-full bg-lightPrimary p-3 dark:bg-navy-700">
                     <span className={`flex items-center text-xl dark:text-white ${classOn}`} style={{cursor: 'pointer'}} onClick={handleOnOff}>

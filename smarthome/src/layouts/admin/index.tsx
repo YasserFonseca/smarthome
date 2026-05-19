@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "components/navbar";
 import Sidebar from "components/sidebar";
-import Footer from "components/footer/Footer";
+// Footer removed
 import routes from "routes";
 
 export default function Admin(props: { [x: string]: any }) {
@@ -59,12 +59,12 @@ export default function Admin(props: { [x: string]: any }) {
   document.documentElement.dir = "ltr";
   return (
     <div className="flex h-full w-full">
-      <Sidebar open={open} onClose={() => setOpen(false)} />
+      {/* Sidebar removed */}
       {/* Navbar & Main Content */}
       <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900">
         {/* Main Content */}
         <main
-          className={`mx-[12px] h-full flex-none transition-all md:pr-2 xl:ml-[313px]`}
+          className={`h-full flex-none transition-all md:pr-2 xl:ml-0`}
         >
           {/* Routes */}
           <div className="h-full">
@@ -84,9 +84,7 @@ export default function Admin(props: { [x: string]: any }) {
                 />
               </Routes>
             </div>
-            <div className="p-0">
-              <Footer />
-            </div>
+            {/* Footer removed */}
           </div>
         </main>
       </div>

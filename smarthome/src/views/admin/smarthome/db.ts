@@ -7,7 +7,7 @@ const connection = mysql.createConnection({
   database: 'sua_base_de_dados'
 });
 
-connection.connect((err) => {
+connection.connect((err: any) => {
   if (err) {
     console.error('Erro ao conectar ao banco de dados:', err);
     return;
@@ -24,7 +24,7 @@ function setupDatabase() {
       email VARCHAR(255) UNIQUE NOT NULL,
       senha VARCHAR(255) NOT NULL
     )
-  `, (err) => {
+  `, (err: any) => {
     if (err) {
       console.error('Erro ao criar tabela:', err);
     } else {
