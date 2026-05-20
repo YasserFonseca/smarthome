@@ -56,4 +56,4 @@ const EnergyDashboard: React.FC<EnergyDashboardProps> = ({ lights, tvActive, rob
   );
 };
 
-export default EnergyDashboard;
+export default React.memo(EnergyDashboard);

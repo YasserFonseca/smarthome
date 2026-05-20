@@ -29,4 +29,4 @@ const ActivityLog: React.FC<ActivityLogProps> = ({ logs }) => {
   );
 };
 
-export default ActivityLog;
+export default React.memo(ActivityLog);

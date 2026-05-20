@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import * as React from 'react';
 import { MdAccessTime, MdLightbulbOutline } from "react-icons/md";
 import ColorPicker from "./ColorPicker";
@@ -21,6 +21,16 @@ import TimeField from 'react-simple-timefield';
     const [classOn, setClassOn] = useState("text-gray-500");
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [dropdownTimeOpen, setDropdownTimeOpen] = useState(false);
+
+    const timeout1Ref = useRef<NodeJS.Timeout | null>(null);
+    const timeout2Ref = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        return () => {
+            if (timeout1Ref.current) clearTimeout(timeout1Ref.current);
+            if (timeout2Ref.current) clearTimeout(timeout2Ref.current);
+        };
+    }, []);
 
     const handleOnOff = () => {
         const newDimmer = dimmer > 0 ? 0 : 75;
@@ -52,38 +62,45 @@ import TimeField from 'react-simple-timefield';
         const seconds = timeParts[2];
         const timeoutTotal = (+hours * 3600000) + (+minutes * 60000) + (+seconds * 1000);
         setDropdownTimeOpen(false);
+
+        if (timeout1Ref.current) clearTimeout(timeout1Ref.current);
+        if (timeout2Ref.current) clearTimeout(timeout2Ref.current);
+
         if (timeoutTotal > 0) {
-            setTimeout(function() { 
+            timeout1Ref.current = setTimeout(function() {
                 setDimmer(70);
                 setClassOn("text-brand-500");
             }, timeoutTotal);
 
-            setTimeout(function() { 
+            timeout2Ref.current = setTimeout(function() {
                 setDimmer(0); 
+                setClassOn("text-gray-500");
             }, timeoutTotal + 10000);
         }
     };
     
     const isLightOn = dimmer > 0;
     
-    let gradients = [];
-    
-    if (props.isTvOn) {
-      gradients.push(`radial-gradient(circle at ${props.tvPosition || '80% 50%'}, rgba(130, 220, 255, 0.5) 0%, rgba(0,0,0,0) 60%)`);
-    }
+    const bgImage = useMemo(() => {
+        let gradients = [];
 
-    if (props.nightMode) {
-       if (!isLightOn) {
-           gradients.push(`linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85))`);
-       } else {
-           gradients.push(`linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2))`);
-       }
-    }
+        if (props.isTvOn) {
+          gradients.push(`radial-gradient(circle at ${props.tvPosition || '80% 50%'}, rgba(130, 220, 255, 0.5) 0%, rgba(0,0,0,0) 60%)`);
+        }
 
-    gradients.push(`radial-gradient(circle, ${color} 0%, rgba(70,252,222,0) ${dimmer}%)`);
-    gradients.push(`url(${props.url})`);
+        if (props.nightMode) {
+           if (!isLightOn) {
+               gradients.push(`linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85))`);
+           } else {
+               gradients.push(`linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2))`);
+           }
+        }
 
-    const bgImage = gradients.join(', ');
+        gradients.push(`radial-gradient(circle, ${color} 0%, rgba(70,252,222,0) ${dimmer}%)`);
+        gradients.push(`url(${props.url})`);
+
+        return gradients.join(', ');
+    }, [props.isTvOn, props.tvPosition, props.nightMode, isLightOn, color, dimmer, props.url]);
 
     return (
         <div style={{backgroundImage: bgImage, backgroundRepeat: 'no-repeat', backgroundSize: '100% 100%', width: '100%', height: '100%', position: 'relative', transition: 'background-image 0.5s ease-in-out' }}>
@@ -191,4 +208,4 @@ import TimeField from 'react-simple-timefield';
     );
 };
 
-export default Room;
+export default React.memo(Room);

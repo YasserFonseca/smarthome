@@ -11,7 +11,8 @@ import PatientMonitor from "./PatientMonitor";
 import ActivityLog from "./ActivityLog";
 import EnergyDashboard from "./EnergyDashboard";
 import { MdLock, MdLockOpen } from "react-icons/md";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
+import React from 'react';
 
 const FloorPlan = (props: any) => {
   const { lights, onToggleLight, mainDoorLocked, onToggleLock, logs, addLog } = props;
@@ -55,6 +56,12 @@ const FloorPlan = (props: any) => {
     }
   };
 
+  const handleToggleNightMode = () => {
+    const newMode = !nightMode;
+    setNightMode(newMode);
+    addLog(newMode ? 'Modo Noturno ativado.' : 'Modo Noturno desativado.');
+  };
+
   return (
     <Card extra={`flex flex-col w-full h-fit rounded-3xl py-6 px-2 text-center transition-colors duration-500 ${nightMode ? 'bg-navy-900' : 'bg-white'}`}>
       <div className="mb-auto flex items-center justify-between px-6">
@@ -62,11 +69,7 @@ const FloorPlan = (props: any) => {
           Controles
         </h2>
         <button 
-          onClick={() => {
-            const newMode = !nightMode;
-            setNightMode(newMode);
-            addLog(newMode ? 'Modo Noturno ativado.' : 'Modo Noturno desativado.');
-          }}
+          onClick={handleToggleNightMode}
           className={`!linear z-[1] flex items-center justify-center rounded-lg p-2 px-4 shadow-sm !transition !duration-200 ${nightMode ? 'bg-white text-navy-900' : 'bg-navy-800 text-white'}`}
         >
           <span className="text-sm font-bold tracking-wide">{nightMode ? '🌞 Modo Dia' : '🌙 Modo Noite'}</span>
@@ -117,4 +120,4 @@ const FloorPlan = (props: any) => {
   );
 };
 
-export default FloorPlan;
+export default React.memo(FloorPlan);
