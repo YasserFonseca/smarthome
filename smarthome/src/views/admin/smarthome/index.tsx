@@ -1,5 +1,5 @@
 import FloorPlan from "views/admin/smarthome/components/FloorPlan";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export interface ActivityLogItem {
   id: number;
@@ -19,27 +19,27 @@ const SmartHome = () => {
   const [mainDoorLocked, setMainDoorLocked] = useState(true);
   const [logs, setLogs] = useState<ActivityLogItem[]>([]);
 
-  const addLog = (message: string) => {
+  const addLog = useCallback((message: string) => {
     const now = new Date();
     const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
     setLogs(prev => [{ id: Date.now(), time: timeStr, message }, ...prev].slice(0, 10)); // Keep last 10
-  };
+  }, []);
 
-  const toggleLight = (room: keyof typeof lights, roomName: string) => {
+  const toggleLight = useCallback((room: keyof typeof lights, roomName: string) => {
     setLights(prev => {
       const newState = !prev[room];
       addLog(`Luz da ${roomName} ${newState ? 'ligada' : 'desligada'}.`);
       return { ...prev, [room]: newState };
     });
-  };
+  }, [addLog]);
 
-  const toggleLock = () => {
+  const toggleLock = useCallback(() => {
     setMainDoorLocked(prev => {
       const newState = !prev;
       addLog(`Porta Principal ${newState ? 'trancada' : 'destrancada'}.`);
       return newState;
     });
-  };
+  }, [addLog]);
 
   return (
     <div className="mt-3 grid h-fit ">

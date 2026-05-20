@@ -83,4 +83,4 @@ const RobotControl: React.FC<RobotControlProps> = ({ addLog, onActiveChange, pos
   );
 };
 
-export default RobotControl;
+export default React.memo(RobotControl);

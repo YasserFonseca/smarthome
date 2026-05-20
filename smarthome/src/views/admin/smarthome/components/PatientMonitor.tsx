@@ -60,4 +60,4 @@ const PatientMonitor: React.FC<PatientMonitorProps> = ({ locationName, positionC
   );
 };
 
-export default PatientMonitor;
+export default React.memo(PatientMonitor);
