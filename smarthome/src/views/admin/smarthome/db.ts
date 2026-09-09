@@ -1,10 +1,10 @@
 import mysql from 'mysql';
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'sua_base_de_dados'
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME || 'sua_base_de_dados'
 });
 
 connection.connect((err: any) => {
