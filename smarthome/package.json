@@ -70,6 +70,7 @@
     "babel-preset-react-app": "^10.0.1",
     "balanced-match": "^1.0.2",
     "batch": "^0.6.1",
+    "bcryptjs": "^3.0.3",
     "bfj": "^7.1.0",
     "big.js": "^5.2.2",
     "bignumber.js": "^9.0.0",
@@ -935,6 +936,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@types/bcryptjs": "^2.4.6",
     "jest-canvas-mock": "^2.5.2",
     "jest-environment-jsdom": "^27.5.1"
   }
