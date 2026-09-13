@@ -1,10 +1,13 @@
 import mysql from 'mysql';
 
+// 🛡️ Sentinel Security Fix: Removed hardcoded database credentials
+// Using environment variables to prevent sensitive data leakage.
+// Note: Direct DB connections from frontend code are insecure. This is for backend/scripts only.
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'sua_base_de_dados'
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 connection.connect((err: any) => {
