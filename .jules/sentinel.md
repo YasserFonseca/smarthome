@@ -1,0 +1,4 @@
+## 2024-07-25 - [CRITICAL] Hardcoded Database Credentials
+**Vulnerability:** Found hardcoded database credentials (username 'root' and empty password) directly in the frontend application code `smarthome/src/views/admin/smarthome/db.ts`.
+**Learning:** Hardcoding credentials in source files, especially frontend files, can easily leak sensitive information to unauthorized users. It seems there was a misunderstanding of how to securely connect to a database from a frontend React application, or this was a quick mockup that wasn't updated for production.
+**Prevention:** Always use environment variables for sensitive configuration like database credentials. Never commit secrets to version control. Ideally, direct database connections should not be made from the frontend; instead, an API should be used to interact with the database securely.
