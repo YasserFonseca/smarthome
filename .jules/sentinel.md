@@ -1,0 +1,4 @@
+## 2024-05-18 - [CRITICAL] Fixed Hardcoded Database Credentials in db.ts
+**Vulnerability:** Hardcoded database credentials (host, user, password, database) were found in the codebase inside `smarthome/src/views/admin/smarthome/db.ts`.
+**Learning:** Backend files like `db.ts` or `insertData.js` mixed in the frontend source tree need special attention. Environment variables should NOT use the `REACT_APP_` prefix for these specific scripts to avoid leaking sensitive information (like DB passwords) into the client-side bundle. This is a critical pattern to recognize when backend and frontend are colocated.
+**Prevention:** Use environment variables (without `REACT_APP_` prefix) for sensitive configurations in backend scripts, and ensure such scripts are not imported by client-side code where the bundler could statically embed their values.
