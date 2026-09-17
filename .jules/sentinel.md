@@ -1,0 +1,4 @@
+## 2024-09-17 - Hardcoded database credentials in React frontend directory
+**Vulnerability:** Found hardcoded database credentials (username, password, etc.) inside `db.ts`, which resides in the React frontend application's source tree (`src/views/admin/smarthome/db.ts`).
+**Learning:** Backend scripts placed inside a frontend directory risk exposing their contents, including hardcoded secrets, to the client-side bundle. Environment variables used for backend scripts within a React project should not be prefixed with `REACT_APP_` to prevent accidental inclusion in the client bundle.
+**Prevention:** Always use environment variables for sensitive data. Do not hardcode secrets in the codebase. Organize frontend and backend code separately to avoid accidentally including backend scripts or secrets in the client-side bundle. Ensure backend-only environment variables are not prefixed with `REACT_APP_` in React applications.
