@@ -1,0 +1,4 @@
+## 2024-05-24 - [CRITICAL] Fix hardcoded database credentials
+**Vulnerability:** Hardcoded root credentials in the `db.ts` file used to connect to the MySQL database.
+**Learning:** Hardcoded credentials should be replaced with environment variables (`process.env.DB_HOST`, `process.env.DB_USER`, `process.env.DB_PASSWORD`, `process.env.DB_NAME`) to prevent sensitive data exposure. Moreover, for scripts running strictly in the backend, these specific environment variables should not be prefixed with `REACT_APP_` to prevent them from inadvertently leaking into the client-side JavaScript bundle.
+**Prevention:** Avoid committing hardcoded credentials to version control and instead utilize environment variables configured securely in the runtime environment. Also, distinguish between front-end and back-end environment variables strictly in full-stack setups.
